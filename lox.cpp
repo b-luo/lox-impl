@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <sstream>
 
 void run_file(const std::string &path) {
     // Open the file at path and read it line by line
@@ -14,17 +15,12 @@ void run_file(const std::string &path) {
 }
 
 void run(const std::string &line) {
-    // Split the line of code into tokens for now
-    std::string copy_line {line};
+    // Split the line of code into tokens based on whitespace for now
+    std::stringstream ss {line};
     std::vector<std::string> tokens;
-    for (size_t i = 0; !copy_line.empty(); ) {
-        size_t next_whitespace = copy_line.find(" ");
-        if (next_whitespace == std::string::npos) break;
-        std::string token = copy_line.substr(i, next_whitespace);
-        // 'Remove' the token we just read
-        copy_line = copy_line.substr(i);
-        i = next_whitespace + 1;
-        tokens.emplace_back(token); 
+    std::string token;
+    while (ss >> token) {
+        tokens.emplace_back(token);
     }
     for (auto token: tokens) {
         std::cout << token << std::endl;
